@@ -8,6 +8,7 @@ var Reader    = require('./lib/reader');
 var Parser    = require('./lib/parser');
 var reader = new Reader;
 var parser = new Parser;
+var _      = require('lodash');
 
 //routes
 
@@ -25,12 +26,13 @@ app.get('/posts/:slug', function(req, res) {
     var type;
 
     if(_.isNumber(params.slug)) {
-      type = 'slug';
+      type = 'id';
     } else {
-      type = 'id'
+      type = 'slug';
     }
 
-    var post = reader.getPost(params.slug, type);
+    var post = reader.findPost(params.slug, type);
+    res.send(post);
 });
 
 app.get('/:page', function(req, res) {

@@ -51,7 +51,7 @@ reader.prototype = {
 
   getPostTitle: function(fileName) {
     var p = this.globalOptions.postsDir + '/'+fileName;
-    var data;
+    var data = {};
 
     var file = fs.readFileSync(p);
     var fileString = parser.parseFile(file.toString());
@@ -82,27 +82,32 @@ reader.prototype = {
 
     if(type === 'slug') {
       var post = this.findPostBySlug(identifier);
+      return post;
+    } else if(type === 'id') {
+
     }
   },
 
   findPostBySlug: function(identifier) {
+    var self  =  this;
     var files =  this.getPostFiles(0);
     var post;
 
     _.each(files, function(file){
-      if(identifier === this.parseSlug(file).slug && _.isEmpty(post)){
+      if(identifier === self.parseSlug(file).slug && _.isEmpty(post)){
         post = file;
       }
     });
 
     if(!_.isEmpty(post)) {
-
+      var data = this.getPost(post);
+      return data;
     }
   },
 
   parseSlug: function(fileName) {
     var file = fileName;
-    var data;
+    var data = {};
 
     var slugInfo = file.split(this.globalOptions.slugSplit);
 
