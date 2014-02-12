@@ -8,6 +8,22 @@
   "dependencies": {
     "express": "3.4.3",
     "ejs": "*",
-    "less-middleware": "*"
+    "less-middleware": "*",
+    "lodash": "2.4.1",
+    "json-structure-validator": "0.0.x"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-cli": "~0.1.13",
+    "grunt-contrib-jshint": "~0.7.2",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-develop": "~0.2.2",
+    "grunt-mocha-test": "~0.8.1",
+    "mocha": "1.17.1",
+    "should": "3.1.2",
+    "time-grunt": "~0.1.1",
+    "load-grunt-tasks": "~0.2.0",
+    "grunt-ejs": "0.1.0",
+    "request": "~2.27.0"
   }
 }
