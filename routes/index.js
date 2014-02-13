@@ -21,20 +21,31 @@ app.get('/posts', function(req, res) {
 });
 
 app.get('/posts/:slug', function(req, res) {
-    //post
-    var params = req.params;
-    var type;
+  //post
+  var params = req.params;
+  var type;
 
-    if(_.isNumber(params.slug)) {
-      type = 'id';
-    } else {
-      type = 'slug';
-    }
+  if(_.isNumber(params.slug)) {
+    type = 'id';
+  } else {
+    type = 'slug';
+  }
 
-    var post = reader.findPost(params.slug, type);
-    res.send(post);
+  var post = reader.findPost(params.slug, type);
+  res.send(post);
 });
 
 app.get('/:page', function(req, res) {
-    //pages
+  //post
+  var params = req.params;
+  var type;
+
+  if(_.isNumber(params.slug)) {
+    type = 'id';
+  } else {
+    type = 'slug';
+  }
+
+  var page = reader.findPage(params.slug, type);
+  res.send(page);
 });
