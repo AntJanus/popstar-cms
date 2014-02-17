@@ -37,6 +37,13 @@ reader.prototype = {
     return files;
   },
 
+  getPageFiles: function() {
+    var files = fs.readdirSync(this.globalOptions.pagesDir);
+    files.sort();
+
+    return files;
+  },
+
   getPostTitles: function(overrideLimit) {
     var self = this;
     var files = this.getPostFiles(overrideLimit);
@@ -78,6 +85,20 @@ reader.prototype = {
     return data;
   },
 
+  getPage: function(fileName) {
+    var p = this.globalOptions.pagesDir + '/'+fileName;
+    var data;
+
+    var file = fs.readFileSync(p);
+    data = parser.parseFile(file.toString());
+    var slugInfo = this.parseSlug(fileName);
+
+    data.id = slugInfo.id;
+    data.slug = slugInfo.slug;
+
+    return data;
+  },
+
   findPost: function(identifier, type) {
 
     if(type === 'slug') {
@@ -90,7 +111,7 @@ reader.prototype = {
 
   findPostBySlug: function(identifier) {
     var self  =  this;
-    var files =  this.getPostFiles(0);
+    var files =  self.getPostFiles(0);
     var post;
 
     _.each(files, function(file){
@@ -102,6 +123,34 @@ reader.prototype = {
     if(!_.isEmpty(post)) {
       var data = this.getPost(post);
       return data;
+    }
+  },
+
+  findPage: function(identifier, type) {
+    if(type === 'slug') {
+      var page = this.findPageBySlug(identifier);
+      return page;
+    } else if(type === 'id') {
+
+    }
+  },
+
+  findPageBySlug: function(identifier) {
+    var self = this;
+    var files = self.getPageFiles();
+    var page;
+
+    _.each(files, function(file) {
+      if(identifier === self.parseSlug(file).slug && _.isEmpty(page)) {
+        page = file;
+      }
+    });
+
+    if(!_.isEmpty(page)) {
+      var data = this.getPage(page);
+      return data;
+    } else {
+      return 'error';
     }
   },
 

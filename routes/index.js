@@ -20,7 +20,7 @@ app.get('/posts', function(req, res) {
     //posts
 });
 
-app.get('/posts/:slug', function(req, res) {
+app.get('/posts/:identifier', function(req, res) {
   //post
   var params = req.params;
   var type;
@@ -31,7 +31,7 @@ app.get('/posts/:slug', function(req, res) {
     type = 'slug';
   }
 
-  var post = reader.findPost(params.slug, type);
+  var post = reader.findPost(params.identifier, type);
   res.send(post);
 });
 
@@ -46,6 +46,6 @@ app.get('/:page', function(req, res) {
     type = 'slug';
   }
 
-  var page = reader.findPage(params.slug, type);
+  var page = reader.findPage(params.page, type);
   res.send(page);
 });
