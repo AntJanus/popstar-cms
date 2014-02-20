@@ -18,6 +18,7 @@ app.get('/', function(req, res) {
 
 app.get('/posts', function(req, res) {
     //posts
+    res.send(reader.getPosts(10));
 });
 
 app.get('/posts/:identifier', function(req, res) {

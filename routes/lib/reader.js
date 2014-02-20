@@ -24,13 +24,18 @@ reader.prototype = {
   },
 
   getPostFiles: function(overrideLimit) {
+    var self = this;
     var limit = overrideLimit ? overrideLimit : this.globalOptions.postsPerPage;
 
     var files = fs.readdirSync(this.globalOptions.postsDir);
-    files.sort();
+
     if(limit === 0) {
       limit = files.length;
     }
+
+    files.sort(function(a, b) {
+      self.fileSort(a, b);
+    });
 
     files.slice(0, limit);
 
@@ -39,8 +44,9 @@ reader.prototype = {
 
   getPageFiles: function() {
     var files = fs.readdirSync(this.globalOptions.pagesDir);
-    files.sort();
-
+    files.sort(function(a, b) {
+      this.fileSort(a, b);
+    });
     return files;
   },
 
@@ -154,16 +160,34 @@ reader.prototype = {
     }
   },
 
+  getPosts: function(limit) {
+    var self = this;
+    var postFiles = this.getPostFiles(limit);
+    var posts = [];
+
+    _.each(postFiles, function(file) {
+      posts.push(self.getPost(file));
+    });
+
+    return posts;
+  },
+
   parseSlug: function(fileName) {
     var file = fileName;
     var data = {};
 
     var slugInfo = file.split(this.globalOptions.slugSplit);
 
-    data.id = slugInfo[0].slice(0,-1);
+    data.id = file.match(this.globalOptions.slugSplit)[0].slice(0,-1);
     data.slug = slugInfo[1].replace(this.globalOptions.extensionSplit,'');
-
     return data;
+  },
+
+  fileSort: function(a, b) {
+    var a1 = parseInt(a, 10);
+    var b1 = parseInt(b, 10);
+
+    return a1 > b1;
   }
 };
 
