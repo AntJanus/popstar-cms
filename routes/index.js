@@ -11,18 +11,29 @@ var _      = require('lodash');
 //routes
 
 app.get('/', function(req, res) {
-    //home
+  //home
+  var payload = {};
+  payload.posts = reader.getPosts(10);
+  payload.pages = reader.getPages(10);
 
+  console.log(payload);
+  res.render('index', payload);
 });
 
 app.get('/posts', function(req, res) {
     //posts
-    res.send(reader.getPosts(10));
+  var payload = {};
+
+  payload.posts = reader.getPosts(10);
+  payload.pages = reader.getPages(10);
+
+  res.render('index', payload);
 });
 
 app.get('/posts/:identifier', function(req, res) {
   //post
   var params = req.params;
+  var payload = {};
   var type;
 
   if(_.isNumber(params.slug)) {
@@ -31,14 +42,12 @@ app.get('/posts/:identifier', function(req, res) {
     type = 'slug';
   }
 
-  var post = reader.findPost(params.identifier, type);
+  payload.post = reader.findPost(params.identifier, type);
+  payload.pages = reader.getPages(10);
 
-  res.render('index', post);
+  res.render('index', payload);
 });
 
-app.get('/pages', function(req, res) {
-    res.send(reader.getPages(0));
-});
 
 app.get('/:page', function(req, res) {
   //post

@@ -19,7 +19,6 @@ parser.prototype = {
     var parts = fileString.split(this.globalOptions.split);
     var data = {};
     var self = this;
-    console.log(parts);
     _.each(parts, function(part) {
       var parsed = self.parseVariable(part);
       if(parsed !== false) {

@@ -1,11 +1,25 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/bower_components/dist/css/bootstrap.min.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+<head>
+    <title></title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <% for(var i=0; i < pages.length; i++) { %>
+            <li>
+                <a href="/pages/<%= pages[i].slug %>"><%= pages[i].title %></a>
+            </li>
+            <% } %>
+        </ul>
+    </nav>
+
+    <div id="content">
+        <% for(var i=0; i < posts.length; i++) { %>
+        <li>
+        <a href="/posts/<%= posts[i].slug %>"><%= posts[i].title %></a>
+        </li>
+        <% } %>
+    </div>
+</body>
 </html>
