@@ -1,3 +1,4 @@
 node_modules/
 public/components
 .DS_STORE
+bower_components

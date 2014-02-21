@@ -5,15 +5,14 @@ var app       = module.exports = express();
 var fs        = require('fs');
 var path      = require('path');
 var Reader    = require('./lib/reader');
-var Parser    = require('./lib/parser');
 var reader = new Reader;
-var parser = new Parser;
 var _      = require('lodash');
 
 //routes
 
 app.get('/', function(req, res) {
     //home
+
 });
 
 app.get('/posts', function(req, res) {
@@ -33,7 +32,12 @@ app.get('/posts/:identifier', function(req, res) {
   }
 
   var post = reader.findPost(params.identifier, type);
-  res.send(post);
+
+  res.render('index', post);
+});
+
+app.get('/pages', function(req, res) {
+    res.send(reader.getPages(0));
 });
 
 app.get('/:page', function(req, res) {

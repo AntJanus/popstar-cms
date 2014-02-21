@@ -172,6 +172,18 @@ reader.prototype = {
     return posts;
   },
 
+  getPages: function(limit) {
+    var self = this;
+    var pageFiles = this.getPageFiles(limit);
+    var pages = [];
+
+    _.each(pageFiles, function(file) {
+      pages.push(self.getPage(file));
+    });
+
+    return pages;
+  },
+
   parseSlug: function(fileName) {
     var file = fileName;
     var data = {};
