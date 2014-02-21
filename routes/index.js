@@ -2,8 +2,6 @@
 
 var express   = require('express');
 var app       = module.exports = express();
-var fs        = require('fs');
-var path      = require('path');
 var Reader    = require('./lib/reader');
 var reader = new Reader;
 var _      = require('lodash');
@@ -21,7 +19,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/posts', function(req, res) {
-    //posts
+  //posts
   var payload = {};
 
   payload.posts = reader.getPosts(10);
