@@ -18,6 +18,15 @@ app.get('/', function(req, res) {
   res.render('index', payload);
 });
 
+app.get('/*', function(req,res) {
+  var slug = req.params[0].split('/');
+  var payload = {};
+  payload = reader.getFile(slug);
+  
+  console.log('wtf', payload);
+  res.render('index', payload); 
+});
+
 app.get('/posts', function(req, res) {
   //posts
   var payload = {};

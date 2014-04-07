@@ -16,13 +16,72 @@ reader.prototype = {
 
   globalOptions: {
     directory: path.normalize('content'),
-    postsDir:  path.normalize('content/posts'),
-    pagesDir:  path.normalize('content/pages'),
     postsPerPage: 10,
     slugSplit: /^[0-9]*-/,
-    extensionSplit: /\.md$/
+    extensionSplit: /\.md$/,
+    ignoreFiles: /^\./,
+    filename: 'post.md'
   },
 
+  //find specific file
+
+  findFile: function(slugPath, existingPath) {
+    var self = this;
+    var fullPath = [];
+    var currentSlug = slugPath.shift();
+    var found = false;
+
+    if(!existingPath || _.isEmpty(existingPath)) {
+      if(!existingPath) {
+        var existingPath = [];
+      }
+
+      fullPath.push(this.globalOptions.directory);
+      existingPath.push(this.globalOptions.directory);
+    } else {
+      _.merge(fullPath, existingPath);
+    }
+    console.log('here', fullPath);
+    var files = fs.readdirSync(path.normalize(fullPath.join('/')));
+
+    files.forEach(function(file) {
+      if(!file.match(self.globalOptions.ignoreFiles) && found === false && currentSlug === self.parseSlug(file).slug) {
+        fullPath.push(file);
+        found = true;
+      }
+    });
+
+    if(found === true && !_.isEmpty(slugPath)) {
+      var nextPath = this.findFile(slugPath, fullPath);
+
+      if(nextPath !== false) {
+        console.log(slugPath, fullPath, nextPath);
+        return nextPath;
+      }
+    } else if(found === true) {
+      return fullPath;
+    } else {
+      return false;
+    }
+  },
+
+  getFile: function(slugPath) {
+    var self = this;
+    var path = this.findFile(slugPath);
+    var data;
+
+    console.log(path);
+    data = parser.parseFile(fs.readFileSync(path.join('/') + '/' + self.globalOptions.filename).toString());
+    data.slug = path;
+
+    return data;
+  },
+
+  getChildren: function(overrideLimit) {
+    var self = this;
+
+    return this;
+  },
   getPostFiles: function(overrideLimit) {
     var self = this;
     var limit = overrideLimit ? overrideLimit : this.globalOptions.postsPerPage;
@@ -190,9 +249,13 @@ reader.prototype = {
 
     var slugInfo = file.split(this.globalOptions.slugSplit);
 
-    data.id = file.match(this.globalOptions.slugSplit)[0].slice(0,-1);
-    data.slug = slugInfo[1].replace(this.globalOptions.extensionSplit,'');
-    return data;
+    if(slugInfo.length == 2) {
+      data.id = file.match(this.globalOptions.slugSplit)[0].slice(0,-1);
+      data.slug = slugInfo[1].replace(this.globalOptions.extensionSplit,'');
+      return data;
+    }
+
+    return false;
   },
 
   fileSort: function(a, b) {

@@ -6,21 +6,11 @@
 <body>
     <a href="/"><img src="/images/popstar-thumb.png"></a>
     <nav>
-        <ul>
-            <% for(var i=0; i < pages.length; i++) { %>
-            <li>
-                <a href="/pages/<%= pages[i].slug %>"><%= pages[i].title %></a>
-            </li>
-            <% } %>
-        </ul>
+        <%= title %>
     </nav>
 
     <div id="content">
-        <% for(var i=0; i < posts.length; i++) { %>
-        <li>
-        <a href="/posts/<%= posts[i].slug %>"><%= posts[i].title %></a>
-        </li>
-        <% } %>
+        <%= content %>
     </div>
 </body>
 </html>
