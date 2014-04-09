@@ -41,7 +41,6 @@ reader.prototype = {
     } else {
       _.merge(fullPath, existingPath);
     }
-    console.log('here', fullPath);
     var files = fs.readdirSync(path.normalize(fullPath.join('/')));
 
     files.forEach(function(file) {
@@ -55,7 +54,6 @@ reader.prototype = {
       var nextPath = this.findFile(slugPath, fullPath);
 
       if(nextPath !== false) {
-        console.log(slugPath, fullPath, nextPath);
         return nextPath;
       }
     } else if(found === true) {
@@ -70,11 +68,14 @@ reader.prototype = {
     var path = this.findFile(slugPath);
     var data;
 
-    console.log(path);
-    data = parser.parseFile(fs.readFileSync(path.join('/') + '/' + self.globalOptions.filename).toString());
-    data.slug = path;
+    if (path === false) {
+      return { error: 'Not found'};
+    } else {
+      data = parser.parseFile(fs.readFileSync(path.join('/') + '/' + self.globalOptions.filename).toString());
+      data.slug = path;
 
-    return data;
+      return data;
+    }
   },
 
   getChildren: function(overrideLimit) {
@@ -82,7 +83,8 @@ reader.prototype = {
 
     return this;
   },
-  getPostFiles: function(overrideLimit) {
+
+  getiChildren: function(overrideLimit) {
     var self = this;
     var limit = overrideLimit ? overrideLimit : this.globalOptions.postsPerPage;
 

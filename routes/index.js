@@ -7,24 +7,16 @@ var reader = new Reader;
 var _      = require('lodash');
 
 //routes
-
-app.get('/', function(req, res) {
-  //home
-  var payload = {};
-  payload.posts = reader.getPosts(10);
-  payload.pages = reader.getPages(10);
-
-  console.log(payload);
-  res.render('index', payload);
-});
-
 app.get('/*', function(req,res) {
   var slug = req.params[0].split('/');
   var payload = {};
   payload = reader.getFile(slug);
-  
-  console.log('wtf', payload);
-  res.render('index', payload); 
+
+  if (payload.error) {
+    res.render('404', payload);
+  } else {
+    res.render('index', payload);
+  }
 });
 
 app.get('/posts', function(req, res) {
