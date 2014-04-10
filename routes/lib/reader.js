@@ -3,6 +3,7 @@ var fs = require('fs');
 var path = require('path');
 var Parser = require('./parser');
 var parser = new Parser;
+var async = require('async');
 
 var reader = function(options) {
 
@@ -71,24 +72,51 @@ reader.prototype = {
     if (path === false) {
       return { error: 'Not found'};
     } else {
-      data = parser.parseFile(fs.readFileSync(path.join('/') + '/' + self.globalOptions.filename).toString());
-      data.slug = path;
+      try {
+        var filePath = fs.readFileSync(path.join('/') + '/' + self.globalOptions.filename);
+        data = parser.parseFile(filePath.toString());
+        data.slug = path;
 
-      return data;
+        return data;
+      } catch (err) {
+        return { error: 'Not found'};
+      }
     }
   },
 
-  getChildren: function(overrideLimit) {
+  getChildren: function (parentPath, overrideLimit) {
     var self = this;
+    var limit = overrideLimit ? overrideLimit : 0;
+    var fullPath = path.normalize(self.directory + '/' + parentPath);
 
-    return this;
+    //get files
+    var children = self.findChildren(fullPath, limit);
+    var payload = {};
+    var parallelExecute = {};
+
+    children.forEach(function(child) {
+      parallelExecute[child] = function(callback) {
+        var path = fullPath + '/' + child + '/' + self.globalOptions.filename;
+        fs.readFile(path, function (err, data) {
+          if (err) {
+            callback(null, null);
+          } else {
+            var d = parser.parseFile(data);
+            d.slug = path;
+            callback(null, d);
+          }
+        });
+      }
+    });
+
+   async.parallel(parallelExecute, function(err, result) {
+    return result;
+   });
   },
 
-  getiChildren: function(overrideLimit) {
+  findChildren: function(parentFile, overrideLimit) {
     var self = this;
-    var limit = overrideLimit ? overrideLimit : this.globalOptions.postsPerPage;
-
-    var files = fs.readdirSync(this.globalOptions.postsDir);
+    var files = fs.readdirSync(parentFile);
 
     if(limit === 0) {
       limit = files.length;

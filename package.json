@@ -10,7 +10,8 @@
     "ejs": "*",
     "less-middleware": "*",
     "lodash": "2.4.1",
-    "json-structure-validator": "0.0.x"
+    "json-structure-validator": "0.0.x",
+    "async": "0.7.x"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
