@@ -9,8 +9,9 @@ var reader = function(options) {
 
   if(options) {
     _.extend(this.globalOptions, options);
-    return this;
   }
+
+  return this;
 };
 
 reader.prototype = {
@@ -65,6 +66,7 @@ reader.prototype = {
   },
 
   getFile: function(slugPath) {
+    console.log(this.globalOptions);
     var self = this;
     var foundPath = this.findFile(_.clone(slugPath));
     var data;

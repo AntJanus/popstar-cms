@@ -2,10 +2,11 @@
 
 var express   = require('express');
 var app       = module.exports = express();
-var Reader    = require('./lib/reader');
-var reader    = new Reader;
-var _         = require('lodash');
 var config    = require('../config');
+var Reader    = require('./lib/reader');
+var reader    = new Reader(config.reader ? config.reader : {});
+var _         = require('lodash');
+
 //routes
 app.get('/*', function(req,res) {
   var slug = req.params[0].split('/');
@@ -20,6 +21,7 @@ app.get('/*', function(req,res) {
     var path = payload.path.join('/');
     reader.getChildren(path, 0, function(result) {
       payload.children = result;
+      payload.site = config.site;
 
       if (format === 'json') {
         res.send(payload);
