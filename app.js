@@ -15,8 +15,8 @@ app.use(express.urlencoded());
 app.use(express.json());
 app.use(express.methodOverride());
 app.use(routes);
-app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(app.router);
 
 if ('development' === app.get('env')) {
   app.use(express.logger('dev'));

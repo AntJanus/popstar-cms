@@ -66,28 +66,32 @@ reader.prototype = {
 
   getFile: function(slugPath) {
     var self = this;
-    var path = this.findFile(slugPath);
+    var foundPath = this.findFile(_.clone(slugPath));
     var data;
 
-    if (path === false) {
+    var filePath = path.normalize(foundPath.join('/') + '/' + self.globalOptions.filename);
+
+    if (foundPath === false) {
       return { error: 'Not found'};
     } else {
       try {
-        var filePath = fs.readFileSync(path.join('/') + '/' + self.globalOptions.filename);
-        data = parser.parseFile(filePath.toString());
-        data.slug = path;
+        var file = fs.readFileSync(filePath).toString();
+        data = parser.parseFile(file);
+        data.path = foundPath;
+        data.slug = slugPath;
 
         return data;
       } catch (err) {
+        console.log(err);
         return { error: 'Not found'};
       }
     }
   },
 
-  getChildren: function (parentPath, overrideLimit) {
+  getChildren: function (parentPath, overrideLimit, callback) {
     var self = this;
     var limit = overrideLimit ? overrideLimit : 0;
-    var fullPath = path.normalize(self.directory + '/' + parentPath);
+    var fullPath = path.normalize(self.globalOptions.directory + '/' + parentPath);
 
     //get files
     var children = self.findChildren(fullPath, limit);
@@ -101,7 +105,7 @@ reader.prototype = {
           if (err) {
             callback(null, null);
           } else {
-            var d = parser.parseFile(data);
+            var d = parser.parseFile(data.toString());
             d.slug = path;
             callback(null, d);
           }
@@ -110,13 +114,21 @@ reader.prototype = {
     });
 
    async.parallel(parallelExecute, function(err, result) {
-    return result;
+     var filtered = [];
+     _.each(result, function(child) {
+      if(!_.isNull(child)) {
+        filtered.push(child);
+      }
+     });
+
+     callback(filtered);
    });
   },
 
   findChildren: function(parentFile, overrideLimit) {
     var self = this;
     var files = fs.readdirSync(parentFile);
+    var limit = overrideLimit;
 
     if(limit === 0) {
       limit = files.length;
