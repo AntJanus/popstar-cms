@@ -6,6 +6,7 @@ var config    = require('../config');
 var Reader    = require('./lib/reader');
 var reader    = new Reader(config.reader ? config.reader : {});
 var _         = require('lodash');
+var async     = require('async');
 
 //routes
 app.get('/*', function(req,res) {
@@ -19,9 +20,24 @@ app.get('/*', function(req,res) {
   } else {
     payload.path.shift();
     var path = payload.path.join('/');
-    reader.getChildren(path, 0, function(result) {
-      payload.children = result;
+    var meta = {};
+
+    meta.children = function(callback) {
+      reader.getChildren(path, 0, function(result) {
+        callback(null, result);
+      });
+    };
+
+    meta.main = function(callback) {
+      reader.getChildren('', 0, function(result) {
+        callback(null, result);
+      });
+    };
+
+    async.parallel(meta, function(err, result) {
+      payload.children = result.children;
       payload.site = config.site;
+      payload.main = result.main;
 
       if (format === 'json') {
         res.send(payload);

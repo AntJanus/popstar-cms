@@ -3,12 +3,22 @@
 <head>
 <title><%= title %></title>
 </head>
+<link rel="stylesheet" href="/bower_components/tseczka-CSS-framework/dist/tseczka.css">
 <body>
-    <a href="/"><img src="/images/popstar-thumb.png"></a>
-    <nav>
-        <%= title %>
-    </nav>
-
+    <div class="nav-container nav-main nav-right">
+        <div class="nav">
+            <a href="/" class="nav-logo nav-title"><img src="/images/popstar-thumb.png"></a> <a href="/" class="nav-title emboss"><%= site.title %></a>
+            <ul>
+            <% for (var i=0; i < main.length; i++) { %>
+                <li>
+                    <a href="/<%= main[i].slug %>">
+                        <%= main[i].title %>
+                    </a>
+                </li>
+            <% } %>
+            </ul>
+        </div>
+    </div>
     <div id="content">
         <%= content %>
     </div>

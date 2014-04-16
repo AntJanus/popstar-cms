@@ -72,7 +72,6 @@ reader.prototype = {
     var data;
 
     var filePath = path.normalize(foundPath.join('/') + '/' + self.globalOptions.filename);
-
     if (foundPath === false) {
       return { error: 'Not found'};
     } else {
@@ -102,13 +101,14 @@ reader.prototype = {
 
     children.forEach(function(child) {
       parallelExecute[child] = function(callback) {
-        var path = fullPath + '/' + child + '/' + self.globalOptions.filename;
-        fs.readFile(path, function (err, data) {
+        var filePath = path.normalize(fullPath + '/' + child + '/' + self.globalOptions.filename);
+        fs.readFile(filePath, function (err, data) {
           if (err) {
             callback(null, null);
           } else {
             var d = parser.parseFile(data.toString());
-            d.slug = path;
+            d.path = filePath;
+            d.slug = self.slugify(filePath);
             callback(null, d);
           }
         });
@@ -145,146 +145,21 @@ reader.prototype = {
     return files;
   },
 
-  getPageFiles: function() {
-    var files = fs.readdirSync(this.globalOptions.pagesDir);
-    files.sort(function(a, b) {
-      this.fileSort(a, b);
-    });
-    return files;
-  },
-
-  getPostTitles: function(overrideLimit) {
+  slugify: function(filePath) {
     var self = this;
-    var files = this.getPostFiles(overrideLimit);
-    var data = [];
+    var slug = [];
 
-    _.each(files, function(file) {
-      data.push(self.getPostTitle(file));
-    });
+    var segments = filePath.split('/');
+    segments.forEach(function(segment) {
+      if (segment === self.globalOptions.directory || segment === self.globalOptions.filename || _.isEmpty(segment)) {
 
-    return data;
-  },
-
-  getPostTitle: function(fileName) {
-    var p = this.globalOptions.postsDir + '/'+fileName;
-    var data = {};
-
-    var file = fs.readFileSync(p);
-    var fileString = parser.parseFile(file.toString());
-    var slugInfo = this.parseSlug(fileName);
-
-    data.title = fileString.title;
-    data.id = slugInfo.id;
-    data.slug = slugInfo.slug;
-
-    return data;
-  },
-
-  getPost: function(fileName) {
-    var p = this.globalOptions.postsDir + '/'+fileName;
-    var data;
-
-    var file = fs.readFileSync(p);
-    data = parser.parseFile(file.toString());
-    var slugInfo = this.parseSlug(fileName);
-
-    data.id = slugInfo.id;
-    data.slug = slugInfo.slug;
-
-    return data;
-  },
-
-  getPage: function(fileName) {
-    var p = this.globalOptions.pagesDir + '/'+fileName;
-    var data;
-
-    var file = fs.readFileSync(p);
-    data = parser.parseFile(file.toString());
-    var slugInfo = this.parseSlug(fileName);
-
-    data.id = slugInfo.id;
-    data.slug = slugInfo.slug;
-
-    return data;
-  },
-
-  findPost: function(identifier, type) {
-
-    if(type === 'slug') {
-      var post = this.findPostBySlug(identifier);
-      return post;
-    } else if(type === 'id') {
-
-    }
-  },
-
-  findPostBySlug: function(identifier) {
-    var self  =  this;
-    var files =  self.getPostFiles(0);
-    var post;
-
-    _.each(files, function(file){
-      if(identifier === self.parseSlug(file).slug && _.isEmpty(post)){
-        post = file;
+      } else {
+        var slugged = self.parseSlug(segment);
+        slug.push(slugged.slug);
       }
     });
 
-    if(!_.isEmpty(post)) {
-      var data = this.getPost(post);
-      return data;
-    }
-  },
-
-  findPage: function(identifier, type) {
-    if(type === 'slug') {
-      var page = this.findPageBySlug(identifier);
-      return page;
-    } else if(type === 'id') {
-
-    }
-  },
-
-  findPageBySlug: function(identifier) {
-    var self = this;
-    var files = self.getPageFiles();
-    var page;
-
-    _.each(files, function(file) {
-      if(identifier === self.parseSlug(file).slug && _.isEmpty(page)) {
-        page = file;
-      }
-    });
-
-    if(!_.isEmpty(page)) {
-      var data = this.getPage(page);
-      return data;
-    } else {
-      return 'error';
-    }
-  },
-
-  getPosts: function(limit) {
-    var self = this;
-    var postFiles = this.getPostFiles(limit);
-    var posts = [];
-
-    _.each(postFiles, function(file) {
-      posts.push(self.getPost(file));
-    });
-
-    return posts;
-  },
-
-  getPages: function(limit) {
-    var self = this;
-    var pageFiles = this.getPageFiles(limit);
-    var pages = [];
-
-    _.each(pageFiles, function(file) {
-      pages.push(self.getPage(file));
-    });
-
-    return pages;
+    return slug;
   },
 
   parseSlug: function(fileName) {
