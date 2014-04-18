@@ -49,6 +49,10 @@ reader.prototype = {
       if(!file.match(self.globalOptions.ignoreFiles) && found === false && currentSlug === self.parseSlug(file).slug) {
         fullPath.push(file);
         found = true;
+      } else if (_.isEmpty(currentSlug) && file === self.globalOptions.filename) {
+        if (existingPath.join('') === self.globalOptions.directory) {
+          found = true;
+        }
       }
     });
 
@@ -66,7 +70,6 @@ reader.prototype = {
   },
 
   getFile: function(slugPath) {
-    console.log(this.globalOptions);
     var self = this;
     var foundPath = this.findFile(_.clone(slugPath));
     var data;
@@ -167,7 +170,6 @@ reader.prototype = {
     var data = {};
 
     var slugInfo = file.split(this.globalOptions.slugSplit);
-
     if(slugInfo.length == 2) {
       data.id = file.match(this.globalOptions.slugSplit)[0].slice(0,-1);
       data.slug = slugInfo[1].replace(this.globalOptions.extensionSplit,'');
