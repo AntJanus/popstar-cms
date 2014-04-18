@@ -71,11 +71,11 @@ reader.prototype = {
     var foundPath = this.findFile(_.clone(slugPath));
     var data;
 
-    var filePath = path.normalize(foundPath.join('/') + '/' + self.globalOptions.filename);
     if (foundPath === false) {
       return { error: 'Not found'};
     } else {
       try {
+        var filePath = path.normalize(foundPath.join('/') + '/' + self.globalOptions.filename);
         var file = fs.readFileSync(filePath).toString();
         data = parser.parseFile(file);
         data.path = foundPath;
