@@ -13,22 +13,6 @@ module.exports = function (grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
-    aglio: {
-      home: {
-        files: {
-          'public/index.html': ['docs/meta.md', 'docs/title.md', 'docs/banner.md', 'docs/toc.md']
-        },
-        theme: 'slate',
-        seperator: "\n\n"
-      },
-      unstable: {
-        files: {
-          'public/unstable/index.html': ['docs/meta.md', 'docs/unstable/title.md', 'docs/banner.md', 'docs/unstable/*/*.md']
-        },
-        theme: 'slate',
-        seperator: "\n\n"
-      }
-    },
     develop: {
       server: {
         file: 'server.js'
@@ -48,6 +32,12 @@ module.exports = function (grunt) {
         },
         src: 'test/**/*.test.js'
       }
+    },
+    less: {
+      options: {
+        compress: true
+      },
+      "public/css/style.css": "public/css/style.less"
     },
     watch: {
       options: {
@@ -78,6 +68,10 @@ module.exports = function (grunt) {
         options: {
           livereload: reloadPort
         }
+      },
+      styles: {
+        files: ['public/css/style.less'],
+        tasks: ['less'],
       },
       ejs: {
         files: ['views/*.ejs'],
@@ -117,3 +111,4 @@ module.exports = function (grunt) {
   grunt.registerTask('default', ['develop', 'watch']);
   grunt.registerTask('test', ['mochaTest']);
 };
+
