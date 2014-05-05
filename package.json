@@ -9,7 +9,6 @@
   "dependencies": {
     "express": "3.4.3",
     "ejs": "*",
-    "less-middleware": "*",
     "lodash": "2.4.1",
     "json-structure-validator": "0.0.x",
     "async": "0.7.x"
