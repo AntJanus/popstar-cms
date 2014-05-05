@@ -1,9 +1,5 @@
 ![build status](https://travis-ci.org/AntJanus/popstar-cms.svg?branch=master)
-<img src="public/images/popstar.png" width="150px" />
-
+![dependencies](https://david-dm.org/antjanus/popstar-cms.png)
 ##Popstar CMS
+<img src="public/images/popstar.png" width="150px" />
 The file-based CMS running on NodeJS.
-
-##To Do
-
-* [ ]
