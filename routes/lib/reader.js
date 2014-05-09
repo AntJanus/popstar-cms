@@ -25,8 +25,12 @@ reader.prototype = {
     filename: 'post.md'
   },
 
-  //find specific file
-
+  /**
+   * Finds a file path to a file by slug
+   * @param array slugPath
+   * @param array existingPath
+   * @return array
+   */
   findFile: function(slugPath, existingPath) {
     var self = this;
     var fullPath = [];
@@ -69,6 +73,11 @@ reader.prototype = {
     }
   },
 
+  /**
+   * Gets file information based on slug path
+   * @param array slugPath
+   * @return object
+   */
   getFile: function(slugPath) {
     var self = this;
     var foundPath = this.findFile(_.clone(slugPath));
@@ -92,6 +101,13 @@ reader.prototype = {
     }
   },
 
+  /**
+   * Gets children data based on parent path
+   * @param string parentPath
+   * @param integer overrideLimit
+   * @param callback callback
+   * @return object
+   */
   getChildren: function (parentPath, overrideLimit, callback) {
     var self = this;
     var limit = overrideLimit ? overrideLimit : 0;
@@ -101,7 +117,6 @@ reader.prototype = {
     var children = self.findChildren(fullPath, limit);
     var payload = {};
     var parallelExecute = {};
-
     children.forEach(function(child) {
       parallelExecute[child] = function(callback) {
         var filePath = path.normalize(fullPath + '/' + child + '/' + self.globalOptions.filename);
@@ -130,10 +145,19 @@ reader.prototype = {
    });
   },
 
+  /**
+   * Returns children paths based on parentFile path
+   * @param string parentFile
+   * @param integer overrideLimit
+   * @return array
+   */
   findChildren: function(parentFile, overrideLimit) {
     var self = this;
-    var files = fs.readdirSync(parentFile);
     var limit = overrideLimit;
+
+    var files = _.filter(fs.readdirSync(parentFile), function(file) {
+      return _.isEmpty(file.split('.')[1]);
+    });
 
     if(limit === 0) {
       limit = files.length;
@@ -148,13 +172,18 @@ reader.prototype = {
     return files;
   },
 
+  /**
+   * Converts a filepath into a slug path
+   * @param string filePath
+   * @return array
+   */
   slugify: function(filePath) {
     var self = this;
     var slug = [];
 
     var segments = filePath.split('/');
     segments.forEach(function(segment) {
-      if (segment === self.globalOptions.directory || segment === self.globalOptions.filename || _.isEmpty(segment)) {
+      if (_.contains(self.globalOptions.directory.split('/'), segment) || segment === self.globalOptions.filename || _.isEmpty(segment)) {
 
       } else {
         var slugged = self.parseSlug(segment);
@@ -165,6 +194,11 @@ reader.prototype = {
     return slug;
   },
 
+  /**
+   * Converts a path segment into an id and a slug
+   * @param string fileName
+   * @return object
+   */
   parseSlug: function(fileName) {
     var file = fileName;
     var data = {};
