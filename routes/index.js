@@ -7,6 +7,7 @@ var Reader    = require('./lib/reader');
 var reader    = new Reader(config.reader ? config.reader : {});
 var _         = require('lodash');
 var async     = require('async');
+var md        = require('marked');
 
 //routes
 app.get('/*', function(req,res) {
@@ -42,20 +43,10 @@ app.get('/*', function(req,res) {
       if (format === 'json') {
         res.send(payload);
       } else {
+        payload.md = md;
         res.render('index', payload);
       }
     });
   }
-});
-
-
-app.get('/posts', function(req, res) {
-  //posts
-  var payload = {};
-
-  payload.posts = reader.getPosts(10);
-  payload.pages = reader.getPages(10);
-
-  res.render('index', payload);
 });
 

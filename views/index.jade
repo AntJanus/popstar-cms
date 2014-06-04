@@ -1,0 +1,20 @@
+doctype html
+html
+    head
+        title= title
+        link(rel="stylesheet", href="/css/style.css")
+        link(rel="stylesheet", href="/bower_components/normalize.css/normalize.css")
+    body
+        div(class="nav-container nav-main nav-right")
+            div.nav
+                a(href="/", class="nav-logo nav-title")
+                    img(src="/images/logo-white-small.png")
+                ul
+                    each item in main
+                        li
+                            a(href="/"+item.slug)= item.title
+        div.container
+            div(class="row", id="content")
+                div.col-12.last
+                    h2= title
+                    !=md(content)

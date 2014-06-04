@@ -7,6 +7,6 @@ module.exports = {
     enabled: false
   },
   site: {
-    title: 'Site title',
+    title: 'Popstar CMS',
   }
 };

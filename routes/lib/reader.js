@@ -25,28 +25,46 @@ reader.prototype = {
     filename: 'post.md'
   },
 
-  /**
-   * Finds a file path to a file by slug
-   * @param array slugPath
-   * @param array existingPath
-   * @return array
-   */
+  getFile: function(slugPath) {
+    var self = this;
+    var foundPath = this.findFile(_.clone(slugPath));
+    var data;
+
+    if (foundPath === false) {
+      return { error: 'Not found'};
+    } else {
+      try {
+        var filePath = path.normalize(foundPath.join('/') + '/' + self.globalOptions.filename);
+        var file = fs.readFileSync(filePath).toString();
+        data = parser.parseFile(file);
+        data.path = foundPath;
+        data.slug = slugPath;
+
+        return data;
+      } catch (err) {
+        console.log(err);
+        return { error: 'Not found'};
+      }
+    }
+  },
+
   findFile: function(slugPath, existingPath) {
     var self = this;
     var fullPath = [];
     var currentSlug = slugPath.shift();
     var found = false;
 
-    if(!existingPath || _.isEmpty(existingPath)) {
-      if(!existingPath) {
-        var existingPath = [];
-      }
+    if(!existingPath) {
+      var existingPath = [];
+    }
 
+    if(_.isEmpty(existingPath)) {
       fullPath.push(this.globalOptions.directory);
       existingPath.push(this.globalOptions.directory);
     } else {
       _.merge(fullPath, existingPath);
     }
+
     var files = fs.readdirSync(path.normalize(fullPath.join('/')));
 
     files.forEach(function(file) {
@@ -73,41 +91,6 @@ reader.prototype = {
     }
   },
 
-  /**
-   * Gets file information based on slug path
-   * @param array slugPath
-   * @return object
-   */
-  getFile: function(slugPath) {
-    var self = this;
-    var foundPath = this.findFile(_.clone(slugPath));
-    var data;
-
-    if (foundPath === false) {
-      return { error: 'Not found'};
-    } else {
-      try {
-        var filePath = path.normalize(foundPath.join('/') + '/' + self.globalOptions.filename);
-        var file = fs.readFileSync(filePath).toString();
-        data = parser.parseFile(file);
-        data.path = foundPath;
-        data.slug = slugPath;
-
-        return data;
-      } catch (err) {
-        console.log(err);
-        return { error: 'Not found'};
-      }
-    }
-  },
-
-  /**
-   * Gets children data based on parent path
-   * @param string parentPath
-   * @param integer overrideLimit
-   * @param callback callback
-   * @return object
-   */
   getChildren: function (parentPath, overrideLimit, callback) {
     var self = this;
     var limit = overrideLimit ? overrideLimit : 0;
@@ -145,12 +128,6 @@ reader.prototype = {
    });
   },
 
-  /**
-   * Returns children paths based on parentFile path
-   * @param string parentFile
-   * @param integer overrideLimit
-   * @return array
-   */
   findChildren: function(parentFile, overrideLimit) {
     var self = this;
     var limit = overrideLimit;
@@ -172,11 +149,6 @@ reader.prototype = {
     return files;
   },
 
-  /**
-   * Converts a filepath into a slug path
-   * @param string filePath
-   * @return array
-   */
   slugify: function(filePath) {
     var self = this;
     var slug = [];
@@ -194,11 +166,6 @@ reader.prototype = {
     return slug;
   },
 
-  /**
-   * Converts a path segment into an id and a slug
-   * @param string fileName
-   * @return object
-   */
   parseSlug: function(fileName) {
     var file = fileName;
     var data = {};
