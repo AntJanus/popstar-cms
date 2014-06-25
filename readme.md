@@ -97,5 +97,24 @@ There are some restrictions on the variable names:
 
 The variables will be automatically added to the file's variable listings in the JSON file and the payload.
 
+###Array variables
+Since I'm using this CMS for a variety of reasons, I thought it prudent to add array support (and possibly object support in the future!) so that when you want to list out certain data in an array, you don't have to bother with extra post-processing.
+
+Here's how to go about it:
+
+````
+customArray[]: first element
+-----
+customArray[]: second element
+````
+
+And so on. The `customArray` values get squished down into an array accessible like so:
+
+````
+title: "My title",
+content: "My content that you will read",
+customArray: [ 'first element', 'second element']
+````
+
 ##Custom configs
 A `config.js` file at the root of the project allows you to override, change, or append additional configs to the project. 
