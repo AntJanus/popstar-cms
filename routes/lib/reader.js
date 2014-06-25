@@ -78,13 +78,15 @@ reader.prototype = {
       }
     });
 
-    if(found === true && !_.isEmpty(slugPath)) {
-      var nextPath = this.findFile(slugPath, fullPath);
+    if(found === true) {
+      if(!_.isEmpty(slugPath)) {
+        var nextPath = this.findFile(slugPath, fullPath);
 
-      if(nextPath !== false) {
-        return nextPath;
+        if(nextPath !== false) {
+          return nextPath;
+        }
       }
-    } else if(found === true) {
+
       return fullPath;
     } else {
       return false;
