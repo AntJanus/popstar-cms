@@ -93,21 +93,19 @@ reader.prototype = {
     }
   },
 
-  getChildren: function (parentPath, overrideLimit, callback) {
-    var self = this;
-    var limit = overrideLimit ? overrideLimit : 0;
-    var fullPath = path.normalize(self.globalOptions.directory + '/' + parentPath);
-
-    //get files
-    var children = self.findChildren(fullPath, limit);
-    var payload = {};
+  getFeed: function (parentPath, limit, offset, callback) {
+    var self            = this;
+    var fullPath        = path.normalize(self.globalOptions.directory + '/' + parentPath);
+    var children        = self.findFeedItems(fullPath, limit, offset);
+    var payload         = {};
     var parallelExecute = {};
+
     children.forEach(function(child) {
       parallelExecute[child] = function(callback) {
         var filePath = path.normalize(fullPath + '/' + child + '/' + self.globalOptions.filename);
         fs.readFile(filePath, function (err, data) {
           if (err) {
-            callback(null, null);
+            callback(err, null);
           } else {
             var d = parser.parseFile(data.toString());
             d.path = filePath;
@@ -130,25 +128,19 @@ reader.prototype = {
    });
   },
 
-  findChildren: function(parentFile, overrideLimit) {
-    var self = this;
-    var limit = overrideLimit;
-
+  findFeedItems: function(parentFile, limit, offset) {
+    var self  = this;
     var files = _.filter(fs.readdirSync(parentFile), function(file) {
       return _.isEmpty(file.split('.')[1]);
     });
-
-    if(limit === 0) {
-      limit = files.length;
-    }
+    limit  = limit && limit !== 0 ? limit : files.length;
+    offset = offset ? offset : 0;
 
     files.sort(function(a, b) {
       self.fileSort(a, b);
     });
 
-    files.slice(0, limit);
-
-    return files;
+    return files.slice(offset, limit + offset);
   },
 
   slugify: function(filePath) {

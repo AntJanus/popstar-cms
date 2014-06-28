@@ -34,7 +34,7 @@ describe('Reader', function() {
   describe('Get children of a file', function() {
     it('should return information on children of a file', function(done) {
       var parentPath = '1-posts';
-      var files = reader.getChildren(parentPath, 0,function(data) {
+      var files = reader.getFeed(parentPath, 0, 0, function(data) {
         data.should.eql([ { title: 'Something',
               content: 'else',
               path: 'test/content/1-posts/1-first-post/post.md',
@@ -43,10 +43,42 @@ describe('Reader', function() {
       });
     });
   });
+
+  describe('Get a limited item feed', function() {
+    it('should return item feed of a specific length', function(done) {
+      var files = reader.getFeed('', 1, 0, function(data) {
+        data.should.have.length(1);
+        data.should.eql([ { title: 'Test',
+           content: 'nothing',
+           path: "test/content/1-posts/post.md",
+           slug: ["posts"]
+        }]);
+        done();
+      });
+    });
+
+    it('should return item feed with a limit and offset', function(done) {
+      var files = reader.getFeed('', 1, 1, function(data) {
+        data.should.have.length(1);
+        data.should.eql([ { title: 'Array post',
+           content: 'some content',
+           array1: [
+            "first element",
+            "second element",
+            "third element"
+           ],
+           path: "test/content/2-arrays/post.md",
+           slug: ["arrays"]
+        }]);
+        done();
+      });
+    });
+  });
+
   describe('Find children of a file', function() {
     it('should return path information on children of a file', function(done) {
       var parentFile = 'test/content/1-posts';
-      var files = reader.findChildren(parentFile);
+      var files = reader.findFeedItems(parentFile);
 
       files.should.eql(['1-first-post']);
       done();
