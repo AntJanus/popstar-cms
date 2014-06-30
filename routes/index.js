@@ -24,13 +24,13 @@ app.get('/*', function(req,res) {
     var meta = {};
 
     meta.children = function(callback) {
-      reader.getChildren(path, 0, function(result) {
+      reader.getFeed(path, 0, function(result) {
         callback(null, result);
       });
     };
 
     meta.main = function(callback) {
-      reader.getChildren('', 0, function(result) {
+      reader.getFeed('', 0, function(result) {
         callback(null, result);
       });
     };
