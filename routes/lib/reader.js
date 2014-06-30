@@ -25,11 +25,11 @@ reader.prototype = {
     filename: 'post.md'
   },
 
+  //slugPath = ['content', 'first-post'] <- devoid of ids
   getFile: function(slugPath) {
     var self = this;
     var foundPath = this.findFile(_.clone(slugPath));
     var data;
-
     if (foundPath === false) {
       return { error: 'Not found'};
     } else {
@@ -48,6 +48,7 @@ reader.prototype = {
     }
   },
 
+  //slugPath = ['first-post'], existingPath = ['content', '1-posts'] <- different type
   findFile: function(slugPath, existingPath) {
     var self = this;
     var fullPath = [];
@@ -93,6 +94,7 @@ reader.prototype = {
     }
   },
 
+  //parentPath = 1-posts <- string without globalOptions.directory
   getFeed: function (parentPath, limit, offset, callback) {
     var self            = this;
     var fullPath        = path.normalize(self.globalOptions.directory + '/' + parentPath);
@@ -128,6 +130,7 @@ reader.prototype = {
    });
   },
 
+  //parentFile = content/1-posts <- string
   findFeedItems: function(parentFile, limit, offset) {
     var self  = this;
     var files = _.filter(fs.readdirSync(parentFile), function(file) {
