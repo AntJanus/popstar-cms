@@ -174,6 +174,21 @@ reader.prototype = {
     return false;
   },
 
+  //note: to avoid constantly switching from array and string notation, this thing will normalize it. Definitely needs some work but should help work some stuff out
+  normalizePath function(norm) {
+    var normalized = {};
+
+    if(typeof norm == 'Object') {
+      normalized.obj = norm;
+      normalized.str = norm.join('/');
+    } else {
+      normalized.obj = norm.split('/');
+      normalized.str = norm;
+    }
+
+    return normalized;
+  },
+
   fileSort: function(a, b) {
     var a1 = parseInt(a, 10);
     var b1 = parseInt(b, 10);
