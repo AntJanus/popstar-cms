@@ -137,7 +137,7 @@ reader.prototype = {
     offset = offset ? offset : 0;
 
     files.sort(function(a, b) {
-      self.fileSort(a, b);
+      return self.fileSort(a, b);
     });
 
     return files.slice(offset, limit + offset);
@@ -175,7 +175,7 @@ reader.prototype = {
   },
 
   //note: to avoid constantly switching from array and string notation, this thing will normalize it. Definitely needs some work but should help work some stuff out
-  normalizePath function(norm) {
+  normalizePath: function(norm) {
     var normalized = {};
 
     if(typeof norm == 'Object') {
@@ -190,8 +190,8 @@ reader.prototype = {
   },
 
   fileSort: function(a, b) {
-    var a1 = parseInt(a, 10);
-    var b1 = parseInt(b, 10);
+    var a1 = parseInt(a);
+    var b1 = parseInt(b);
 
     return a1 > b1;
   }

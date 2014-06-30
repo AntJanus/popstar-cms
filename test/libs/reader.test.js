@@ -104,4 +104,17 @@ describe('Reader', function() {
       done();
     });
   });
+
+  describe('File sort by id', function() {
+    it.only('should return correctly sorted files', function(done) {
+      var files = ['1-something', '2-else', '15-trick-file', '03-trick'];
+      files = files.sort(function (a, b) {
+        return reader.fileSort(a, b);
+      });
+
+
+      files.should.eql([ '1-something', '2-else', '03-trick', '15-trick-file' ]);
+      done();
+    });
+  });
 });
