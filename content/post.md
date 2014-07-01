@@ -2,8 +2,18 @@ title: Popstar CMS The file-based CMS running on NodeJS
 ------
 content:
 
+[![Stories in Ready](https://badge.waffle.io/antjanus/popstar-cms.png?label=ready&title=Ready)](https://waffle.io/antjanus/popstar-cms)
 ![build status](https://travis-ci.org/AntJanus/popstar-cms.svg?branch=master) ![dependencies](https://david-dm.org/antjanus/popstar-cms.png)
-<img src="/images/logo-small.png" width="50px" />
+
+The file-based CMS running on NodeJS.
+
+##Demos
+
+Some projects that currently use Popstar as its engine:
+
+* [Popstar Preview](http://popstar.antjan.us/)
+* [Jumbotron App](http://jumbotron.antjan.us/) and the [repo](https://github.com/AntJanus/jumbotron-feed-app) for it.
+* [Proverbs API](http://proverbs-app.antjan.us/) and its [random feature](http://proverbs-app.antjan.us/random).
 
 ##Dependencies
 
@@ -100,5 +110,24 @@ There are some restrictions on the variable names:
 
 The variables will be automatically added to the file's variable listings in the JSON file and the payload.
 
+###Array variables
+Since I'm using this CMS for a variety of reasons, I thought it prudent to add array support (and possibly object support in the future!) so that when you want to list out certain data in an array, you don't have to bother with extra post-processing.
+
+Here's how to go about it:
+
+````
+customArray[]: first element
+-----
+customArray[]: second element
+````
+
+And so on. The `customArray` values get squished down into an array accessible like so:
+
+````
+title: "My title",
+content: "My content that you will read",
+customArray: [ 'first element', 'second element']
+````
+
 ##Custom configs
-A `config.js` file at the root of the project allows you to override, change, or append additional configs to the project.
+A `config.js` file at the root of the project allows you to override, change, or append additional configs to the project. 

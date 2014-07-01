@@ -3,6 +3,14 @@
 ##Popstar CMS <img src="public/images/logo-small.png" width="50px" />
 The file-based CMS running on NodeJS.
 
+##Demos
+
+Some projects that currently use Popstar as its engine:
+
+* [Popstar Preview](http://popstar.antjan.us/)
+* [Jumbotron App](http://jumbotron.antjan.us/) and the [repo](https://github.com/AntJanus/jumbotron-feed-app) for it.
+* [Proverbs API](http://proverbs-app.antjan.us/) and its [random feature](http://proverbs-app.antjan.us/random).
+
 ##Dependencies
 
 * Node (obviously)
