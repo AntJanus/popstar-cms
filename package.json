@@ -15,17 +15,19 @@
     "marked": "0.3.x"
   },
   "devDependencies": {
+    "coveralls": "^2.10.1",
     "grunt": "~0.4.1",
     "grunt-cli": "~0.1.13",
     "grunt-contrib-jshint": "~0.7.2",
-    "grunt-contrib-watch": "~0.5.3",
     "grunt-contrib-less": "~0.11.0",
+    "grunt-contrib-watch": "~0.5.3",
     "grunt-develop": "~0.2.2",
     "grunt-mocha-test": "~0.8.1",
-    "mocha": "1.17.1",
-    "should": "3.1.2",
-    "time-grunt": "~0.1.1",
     "load-grunt-tasks": "~0.2.0",
-    "request": "~2.27.0"
+    "mocha": "1.17.1",
+    "mocha-lcov-reporter": "0.0.1",
+    "request": "~2.27.0",
+    "should": "3.1.2",
+    "time-grunt": "~0.1.1"
   }
 }
