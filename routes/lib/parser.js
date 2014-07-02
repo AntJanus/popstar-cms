@@ -1,20 +1,31 @@
 var _ = require('lodash');
 
 var parser = function(options) {
+  this.globalOptions = {
+    split: /-{3,}(\r\n|\r|\n)/g,
+    varSplit: /^(\w+)(\[\])?:/,
+    arraySplit: /\[\]/
+  };
+
+  this.options = function(options) {
+    if (options) {
+      _.extend(this.globalOptions, options);
+      return this;
+    } else {
+      return this.globalOptions;
+    }
+  };
 
   if(options) {
     _.extend(this.globalOptions, options);
     return this;
   }
+
+  return this;
 };
 
 parser.prototype = {
 
-  globalOptions: {
-    split: /-{3,}(\r\n|\r|\n)/g,
-    varSplit: /^(\w+)(\[\])?:/,
-    arraySplit: /\[\]/
-  },
 
   parseFile: function(fileString) {
     var parts = fileString.split(this.globalOptions.split);
@@ -57,7 +68,8 @@ parser.prototype = {
     }
 
     return false;
-  }
+  },
+
 };
 
 module.exports = parser;

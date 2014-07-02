@@ -7,7 +7,32 @@ var async = require('async');
 
 var reader = function(options) {
 
+  this.globalOptions = {
+    directory: path.normalize('content'),
+    postsPerPage: 10,
+    slugSplit: /^[0-9]*-/,
+    extensionSplit: /\.md$/,
+    ignoreFiles: /^\./,
+    filename: 'post.md'
+  };
+
+  this.options = function(options) {
+
+    if (options) {
+      parser.options(options.parser);
+      delete options.parser;
+      _.extend(this.globalOptions, options);
+      return this;
+    } else {
+      var parserOptions = parser.options();
+      var clonedOpts = _.clone(this.globalOptions);
+      clonedOpts.parser = parserOptions;
+      return clonedOpts;
+    }
+  };
+
   if(options) {
+    parser.options(options.parser);
     _.extend(this.globalOptions, options);
   }
 
@@ -16,14 +41,6 @@ var reader = function(options) {
 
 reader.prototype = {
 
-  globalOptions: {
-    directory: path.normalize('content'),
-    postsPerPage: 10,
-    slugSplit: /^[0-9]*-/,
-    extensionSplit: /\.md$/,
-    ignoreFiles: /^\./,
-    filename: 'post.md'
-  },
 
   //slugPath = ['content', 'first-post'] <- devoid of ids
   getFile: function(slugPath) {
@@ -198,6 +215,7 @@ reader.prototype = {
 
     return a1 > b1;
   }
+
 };
 
 module.exports = reader;
