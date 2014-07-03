@@ -27,16 +27,20 @@ module.exports = function (grunt) {
     mocha_istanbul: {
       coverage: {
         src: 'test',
+        options: {
+          mask: '**/*.test.js'
+        }
       },
       coveralls: {
         src: 'test',
         options: {
+          mask: '**/*.test.js',
           coverage: true,
           check: {
             lines: 75,
             statements: 75
           },
-          root: './routes/lib',
+          root: './routes',
           reportFormats: ['cobertura', 'lcovonly']
         }
       }
@@ -110,7 +114,7 @@ module.exports = function (grunt) {
   files = grunt.config('watch.server.files');
   files = grunt.file.expand(files);
 
-  grunt.event.on('coverage', function(lcovFileContesnts, done) {
+  grunt.event.on('coverage', function(lcovFileContents, done) {
     done();
   });
 
@@ -131,6 +135,6 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('default', ['develop', 'watch']);
-  grunt.registerTask('test', ['mochaTest', 'mocha_istanbul:coveralls']);
+  grunt.registerTask('test', ['mochaTest', 'mocha_istanbul']);
 };
 
