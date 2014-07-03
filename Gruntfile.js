@@ -131,6 +131,6 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('default', ['develop', 'watch']);
-  grunt.registerTask('test', ['mochaTest', 'mocha_istanbul']);
+  grunt.registerTask('test', ['mochaTest', 'mocha_istanbul:coverage']);
 };
 
