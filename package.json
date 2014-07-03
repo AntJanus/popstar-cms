@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-    "test": "grunt test | ./node_modules/coveralls/bin/coveralls.js"
+    "test": "grunt test"
   },
   "dependencies": {
     "express": "3.4.3",
