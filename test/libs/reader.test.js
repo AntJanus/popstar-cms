@@ -117,4 +117,76 @@ describe('Reader', function() {
       done();
     });
   });
+
+  describe('options', function() {
+    it('should return existing options', function(done) {
+      var testReader = new Reader;
+      var opts = testReader.options();
+
+      opts.should.eql({
+        directory: 'content',
+        postsPerPage: 10,
+        slugSplit: /^[0-9]*-/,
+        extensionSplit: /\.md$/,
+        ignoreFiles: /^\./,
+        filename: 'post.md',
+        parser: {
+          split: /-{3,}(\r\n|\r|\n)/g,
+          varSplit: /^(\w+)(\[\])?:/,
+          arraySplit: /\[\]/
+        }
+      });
+
+      done();
+    });
+
+    it('should extend existing options', function(done) {
+      var testReader = new Reader;
+      var opts = testReader.options();
+
+      opts.should.eql({
+        directory: 'content',
+        postsPerPage: 10,
+        slugSplit: /^[0-9]*-/,
+        extensionSplit: /\.md$/,
+        ignoreFiles: /^\./,
+        filename: 'post.md',
+        parser: {
+          split: /-{3,}(\r\n|\r|\n)/g,
+          varSplit: /^(\w+)(\[\])?:/,
+          arraySplit: /\[\]/
+        }
+      });
+
+      var newOpts = {
+        directory: 'test/content',
+        test: 1,
+        parser: {
+          split: /,/g,
+          test: 2
+        }
+      };
+
+      testReader.options(newOpts);
+      opts = testReader.options();
+
+      opts.should.eql({
+        directory: 'test/content',
+        postsPerPage: 10,
+        slugSplit: /^[0-9]*-/,
+        extensionSplit: /\.md$/,
+        ignoreFiles: /^\./,
+        filename: 'post.md',
+        test: 1,
+        parser: {
+          split: /,/g,
+          varSplit: /^(\w+)(\[\])?:/,
+          arraySplit: /\[\]/,
+          test: 2,
+        }
+      });
+
+      done();
+    });
+  });
 });
