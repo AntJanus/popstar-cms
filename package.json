@@ -23,6 +23,7 @@
     "grunt-contrib-watch": "~0.5.3",
     "grunt-develop": "~0.2.2",
     "grunt-mocha-test": "~0.8.1",
+    "istanbul": "^0.2.14",
     "jscoverage": "^0.5.4",
     "load-grunt-tasks": "~0.2.0",
     "mocha": "1.17.1",
