@@ -22,6 +22,7 @@
     "grunt-contrib-less": "~0.11.0",
     "grunt-contrib-watch": "~0.5.3",
     "grunt-develop": "~0.2.2",
+    "grunt-mocha-istanbul": "^1.5.0",
     "grunt-mocha-test": "~0.8.1",
     "istanbul": "^0.2.14",
     "jscoverage": "^0.5.4",

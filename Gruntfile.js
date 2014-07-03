@@ -24,6 +24,23 @@ module.exports = function (grunt) {
       },
       files: ['<%= watch.server.files %>', '<%= watch.js.files ?>', '<%= watch.test.files %>']
     },
+    mocha_istanbul: {
+      coverage: {
+        src: 'test',
+      },
+      coveralls: {
+        src: 'test',
+        options: {
+          coverage: true,
+          check: {
+            lines: 75,
+            statements: 75
+          },
+          root: './routes/lib',
+          reportFormats: ['cobertura', 'lcovonly']
+        }
+      }
+    },
     mochaTest: {
       api: {
         options: {
@@ -93,6 +110,11 @@ module.exports = function (grunt) {
   files = grunt.config('watch.server.files');
   files = grunt.file.expand(files);
 
+  grunt.event.on('coverage', function(lcovFileContesnts, done) {
+    done();
+  });
+
+
   grunt.registerTask('delayed-livereload', 'Live reload after the node server has restarted.', function () {
     var done = this.async();
     setTimeout(function () {
@@ -109,6 +131,6 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('default', ['develop', 'watch']);
-  grunt.registerTask('test', ['mochaTest']);
+  grunt.registerTask('test', ['mochaTest', 'mocha_istanbul']);
 };
 
