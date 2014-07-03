@@ -126,4 +126,9 @@ customArray: [ 'first element', 'second element']
 ````
 
 ##Custom configs
-A `config.js` file at the root of the project allows you to override, change, or append additional configs to the project. 
+A `config.js` file at the root of the project allows you to override, change, or append additional configs to the project.
+
+##Changelog
+
+* 0.1.0 - first actual numeric release, tons of updates, from better tracking to testing, fixed parser and reader, and cleaned up code
+* Alpha Release - premature alpha release. Working version of everything
