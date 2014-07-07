@@ -10,6 +10,8 @@ html
                 a(href="/", class="nav-logo nav-title")
                     img(src="/images/logo-white-small.png")
                 ul
+                    li
+                        a(href="https://github.com/AntJanus/popstar-cms")= github
                     each item in main
                         li
                             a(href="/"+item.slug)= item.title
