@@ -1,5 +1,6 @@
 [![Stories in Ready](https://badge.waffle.io/antjanus/popstar-cms.png?label=ready&title=Ready)](https://waffle.io/antjanus/popstar-cms)
-![build status](https://travis-ci.org/AntJanus/popstar-cms.svg?branch=master) ![dependencies](https://david-dm.org/antjanus/popstar-cms.png) [![Coverage Status](https://coveralls.io/repos/AntJanus/popstar-cms/badge.png?branch=code-coverage)](https://coveralls.io/r/AntJanus/popstar-cms?branch=code-coverage)
+![build status](https://travis-ci.org/AntJanus/popstar-cms.svg?branch=master) ![dependencies](https://david-dm.org/antjanus/popstar-cms.png)
+
 ##Popstar CMS <img src="public/images/logo-small.png" width="50px" />
 The file-based CMS running on NodeJS.
 
