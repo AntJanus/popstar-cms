@@ -7,20 +7,24 @@ var path    = require('path');
 var routes  = require('./routes');
 var app     = express();
 
+//express packages
+var serveStatic = require('serve-static');
+var logger = require('morgan');
+var bodyParser = require('body-parser');
+var errorHandler = require('error-handler');
+
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
-app.use(express.favicon());
-app.use(express.urlencoded());
-app.use(express.json());
-app.use(express.methodOverride());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(serveStatic(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(logger('dev'));
 app.use(routes);
 app.use(app.router);
 
 if ('development' === app.get('env')) {
-  app.use(express.logger('dev'));
-  app.use(express.errorHandler());
+  app.use(errorHandler());
 }
 
 module.exports = app;
