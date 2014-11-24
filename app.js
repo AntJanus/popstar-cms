@@ -21,7 +21,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(logger('dev'));
 app.use(routes);
-app.use(app.router);
 
 if ('development' === app.get('env')) {
   app.use(errorHandler());
