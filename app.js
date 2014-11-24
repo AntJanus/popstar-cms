@@ -11,7 +11,7 @@ var app     = express();
 var serveStatic = require('serve-static');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
-var errorHandler = require('error-handler');
+var errorHandler = require('errorhandler');
 
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
