@@ -16,7 +16,7 @@
     "lodash": "^3.10.0",
     "marked": "^0.3.3",
     "morgan": "^1.6.1",
-    "popstar-file-reader": "^1.0.3",
+    "popstar-file-reader": "^1.0.5",
     "serve-static": "^1.10.0"
   },
   "devDependencies": {

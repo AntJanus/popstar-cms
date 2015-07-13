@@ -701,9 +701,9 @@
       }
     },
     "popstar-file-reader": {
-      "version": "1.0.3",
-      "from": "popstar-file-reader@>=1.0.3 <2.0.0",
-      "resolved": "https://registry.npmjs.org/popstar-file-reader/-/popstar-file-reader-1.0.3.tgz",
+      "version": "1.0.5",
+      "from": "popstar-file-reader@>=1.0.5 <2.0.0",
+      "resolved": "https://registry.npmjs.org/popstar-file-reader/-/popstar-file-reader-1.0.5.tgz",
       "dependencies": {
         "async": {
           "version": "0.9.2",
